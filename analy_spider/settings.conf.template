@@ -1,0 +1,17 @@
+# spider configuration
+
+# 配置数据库
+[db_param]
+host=10.18.5.88
+database=dps0228
+user=postgres
+password=bugaosuni
+port=5432
+charset=utf8
+DBType=postgresql
+
+
+
+# 获取的html存储的文件路径
+[htmlpath]
+html_path=/home/xsl/下载/

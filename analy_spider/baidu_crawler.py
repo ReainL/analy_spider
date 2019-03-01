@@ -11,6 +11,7 @@ import re
 import random
 import logging.config
 import requests
+import os
 
 from bs4 import BeautifulSoup
 from config import logger_path
@@ -140,7 +141,29 @@ def remv_repeat_info(conn, sql_params):
         execute_sql(conn, sql_info, sql_params)
 
 
+def remv_his_log():
+    """
+    清除60天前的日志
+    :return:
+    """
+    func_name = "清除60天前的日志"
+    logger.debug('start %s ' % func_name)
+    log_path = '/home/xsl/log'  # 需要清空的文件夹
+    ds_li = list(os.walk(log_path))
+    ceiling = datetime.datetime.now() - datetime.timedelta(days=60)  # 设定60天前的文件为过期
+
+    for wd in ds_li:
+        os.chdir(wd[0])  # 进入本级路径，防止找不到文件而报错
+        if len(wd[2]) > 0:
+            for file_log in wd[2]:
+                file_crt_dtm = datetime.datetime.fromtimestamp(os.path.getctime(file_log))  # 获取文件创建时间
+                if file_crt_dtm < ceiling:
+                    os.remove(file_log)  # 删除文件
+    logger.debug('end %s ' % func_name)
+
+
 def deal():
+    remv_his_log()
     last_mon = (now - datetime.timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
     str_his_dtm = (now - datetime.timedelta(days=60)).strftime("%Y-%m-%d %H:%M:%S")
     logger.debug('last_mon:%s, str_his_dtm:%s ' % (last_mon, str_his_dtm))

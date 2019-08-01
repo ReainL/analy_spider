@@ -79,7 +79,7 @@ def key_word_srch(conn, last_mon, key_word_li, url_li, bj_num_li):
                     'User-Agent': user_agent
                 }
                 data = {'rtt': 1, 'bsst': 1, 'cl': '2', 'tn': 'news', 'word': key_word, 'pn': pn}
-                zx_html = requests.get(url=zx_url, params=data, headers=my_headers)
+                zx_html = requests.get(url=zx_url, params=data, headers=my_headers, timeout=5)
                 soup = BeautifulSoup(zx_html.text, 'html.parser')
                 soup_content = soup.find('div', id='content_left')  # 定位主要模块内容
                 result_list = soup_content.find_all('div', class_='result')     # 定位每个小模块
